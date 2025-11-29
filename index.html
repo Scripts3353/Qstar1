@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qstar Stuff</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    background: radial-gradient(ellipse at bottom, #1b003d 0%, #4a007f 100%);
+    color: white;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Stars */
+  .stars {
+    width: 2px;
+    height: 2px;
+    background: white;
+    position: absolute;
+    border-radius: 50%;
+    animation: twinkle 2s infinite alternate;
+  }
+
+  @keyframes twinkle {
+    from { opacity: 0.2; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1.2); }
+  }
+
+  header {
+    text-align: center;
+    padding: 50px 20px 20px;
+    font-size: 3em;
+    font-weight: bold;
+    text-shadow: 0 0 10px #fff, 0 0 20px #ff66ff, 0 0 30px #9900ff;
+  }
+
+  nav {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  nav button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    border: 2px solid white;
+    border-radius: 10px;
+    background: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  nav button:hover {
+    background: #9900ff;
+    box-shadow: 0 0 10px #ff66ff, 0 0 20px #9900ff;
+  }
+
+  .section {
+    display: none; /* Hide all sections initially */
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    text-align: center;
+  }
+
+  .section.active {
+    display: block; /* Show the active section */
+  }
+
+  .section h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-shadow: 0 0 5px #ff66ff;
+  }
+
+  .section p {
+    font-size: 1.1em;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<header>Qstar Stuff</header>
+
+<nav>
+  <button onclick="showSection('home')">Home</button>
+  <button onclick="showSection('about')">About Me</button>
+</nav>
+
+<div class="section active" id="home">
+  <p>Welcome to your galaxy-themed site! 🌌</p>
+  <p>Everything here sparkles like the stars above.</p>
+</div>
+
+<div class="section" id="about">
+  <h2>About Me</h2>
+  <p>Hello! I’m [Your Name]. You can customize this section with your bio, hobbies, or anything you want to share with visitors.</p>
+</div>
+
+<script>
+  // Star generation
+  const starCount = 200;
+  for (let i = 0; i < starCount; i++) {
+    let star = document.createElement('div');
+    star.className = 'stars';
+    star.style.top = Math.random() * window.innerHeight + 'px';
+    star.style.left = Math.random() * window.innerWidth + 'px';
+    star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+    star.style.animationDuration = 1 + Math.random() * 3 + 's';
+    document.body.appendChild(star);
+  }
+
+  // Section toggle
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+</script>
+
+</body>
+</html>
