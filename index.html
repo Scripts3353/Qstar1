@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Qstar Stuff</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 <style>
   body, html {
     margin: 0;
@@ -13,6 +15,7 @@
     background: radial-gradient(ellipse at bottom, #1b003d 0%, #4a007f 100%);
     color: white;
     overflow-x: hidden;
+    text-align: center;
     position: relative;
   }
 
@@ -25,25 +28,21 @@
     border-radius: 50%;
     animation: twinkle 2s infinite alternate;
   }
-
   @keyframes twinkle {
     from { opacity: 0.2; transform: scale(0.5); }
     to { opacity: 1; transform: scale(1.2); }
   }
 
   header {
-    text-align: center;
-    padding: 50px 20px 20px;
     font-size: 3em;
-    font-weight: bold;
+    padding: 50px 20px;
     text-shadow: 0 0 10px #fff, 0 0 20px #ff66ff, 0 0 30px #9900ff;
   }
 
   nav {
-    text-align: center;
     margin-top: 20px;
+    display: none; /* hidden until login */
   }
-
   nav button {
     margin: 0 10px;
     padding: 10px 20px;
@@ -55,14 +54,13 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
-
   nav button:hover {
     background: #9900ff;
     box-shadow: 0 0 10px #ff66ff, 0 0 20px #9900ff;
   }
 
   .section {
-    display: none; /* Hide all sections initially */
+    display: none;
     max-width: 800px;
     margin: 50px auto;
     padding: 20px;
@@ -70,20 +68,17 @@
     border-radius: 15px;
     text-align: center;
   }
-
-  .section.active {
-    display: block; /* Show the active section */
-  }
-
+  .section.active { display: block; }
   .section h2 {
     font-size: 2em;
     margin-bottom: 20px;
     text-shadow: 0 0 5px #ff66ff;
   }
+  .section p { font-size: 1.1em; line-height: 1.6; }
 
-  .section p {
-    font-size: 1.1em;
-    line-height: 1.6;
+  /* Google login button container */
+  #login-container {
+    margin-top: 50px;
   }
 </style>
 </head>
@@ -91,17 +86,38 @@
 
 <header>Qstar Stuff</header>
 
-<nav>
+<div id="login-container">
+  <div id="g_id_onload"
+       data-client_id="YOUR_GOOGLE_CLIENT_ID"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
+  </div>
+  <div class="g_id_signin"
+       data-type="standard"
+       data-shape="rectangular"
+       data-theme="filled_blue"
+       data-text="signin_with"
+       data-size="large"
+       data-logo_alignment="left">
+  </div>
+</div>
+
+<nav id="navbar">
   <button onclick="showSection('home')">Home</button>
   <button onclick="showSection('about')">About Me</button>
 </nav>
 
-
+<div class="section active" id="home">
+  <p>Welcome to your galaxy-themed site! 🌌</p>
+  <p>Everything here sparkles like the stars above.</p>
+</div>
 
 <div class="section" id="about">
   <h2>About Me</h2>
-  <p>Hello! I’m Qstar. I am a Dropper in multiple servers (A dropper is someone who gives stuff for free like spotify premium), I code py, html, and I'm currently trying to learn C#</p>
+  <p>Hello! I’m [Your Name]. You can customize this section with your bio, hobbies, or anything you want to share with visitors.</p>
 </div>
+
+<div id="user-info"></div>
 
 <script>
   // Star generation
@@ -116,10 +132,22 @@
     document.body.appendChild(star);
   }
 
-  // Section toggle
+  // Show section
   function showSection(id) {
     document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+  }
+
+  // Google login callback
+  function handleCredentialResponse(response) {
+    const data = jwt_decode(response.credential);
+    document.getElementById('user-info').innerHTML = `
+      <h2>Welcome, ${data.name}!</h2>
+      <img src="${data.picture}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;margin-top:10px;">
+    `;
+    document.getElementById('login-container').style.display = 'none';
+    document.getElementById('navbar').style.display = 'block';
+    showSection('home'); // show home after login
   }
 </script>
 
